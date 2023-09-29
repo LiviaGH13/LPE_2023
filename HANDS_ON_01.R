@@ -6,7 +6,7 @@
 
 # LOADING LIBS ------------------------------------------------------------
 install.packages(c("tidyverse", "dplyr", "janitor"))
-library("dplyr","janitor")
+library("dplyr","janitor","readr")
 
 
 # LOADING DATA ------------------------------------------------------------
@@ -15,9 +15,9 @@ exp_22062293 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/Serv
 
 # SHORTCUTS ---------------------------------------------------------------
 
-# CLEAN CONSOLE = CTRL + l
+# limpiar consola = CTRL + l
 # %>% pipe operator = SHIFT + CTRL + M
-# CTRL + ENTER = run line
+# CTRL + ENTER = ejecutar
 # SHIFT + CTRL + R = Indice
 
 # GIT COMMANDS ------------------------------------------------------------
@@ -27,7 +27,7 @@ exp_22062293 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/Serv
 # git commit = Add a comment
 # git add . = Add the current dir to the entire repo
 # git push -u origin main = send to the remote repo (Github)
-
+# %>% para pasar el flijo entre diferentes códigos que voy a utilizar
 
 # CLI COMMANDS ------------------------------------------------------------
 
@@ -35,7 +35,7 @@ exp_22062293 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/Serv
 # ls = list terminal 
 # mkdir = create a dir
 # cd = change dir
-
+# clear = limpiar terminal
 
 # BASIC INSTRUCTIONS ------------------------------------------------------
 
@@ -51,3 +51,10 @@ str(exp_22062293) #get datatype
 df <- exp_22062293$ListaEESSPrecio #get readable data
 df %>% glimpse()
 df %>% janitor::clean_names() %>% glimpse()
+# fin de la clase de hoy. Siguiente hacemos la entrega
+
+
+# WORKING W PIPE (OPT. MODE) ----------------------------------------------
+clean_data <- df %>% janitor::clean_names() %>% glimpse()
+cd <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% janitor::clean_names()
+cd %>% glimpse()
