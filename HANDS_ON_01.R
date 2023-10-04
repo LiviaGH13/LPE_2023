@@ -6,7 +6,8 @@
 
 # LOADING LIBS ------------------------------------------------------------
 install.packages(c("tidyverse", "dplyr", "janitor"))
-library("dplyr","janitor","readr")
+install.packages(c("xlsx"))
+library("dplyr","janitor","readr", "xlsx")
 
 
 # LOADING DATA ------------------------------------------------------------
@@ -65,7 +66,12 @@ cd %>% glimpse()
 villa_boa_gas <- cd %>% select(precio_gasoleo_a, rotulo, direccion, localidad) %>% 
   filter(localidad=="VILLAVICIOSA DE ODON" | localidad== "BOADILLA DEL MONTE") %>% 
   arrange(precio_gasoleo_a) %>% View()
-MIN <- cd %>% select(min(precio_gasoleo_a, na.rm = FALSE))
 gas_max <- cd %>% select(precio_gasoleo_a, rotulo, direccion, provincia) %>% filter(provincia == "MADRID") %>% arrange(precio_gasoleo_a) 
+
+# STORING DATA ------------------------------------------------------------
+write.csv(gas_max, "gas_max.csv")
+xlsx::write.xlsx(gas_max, "gas_max.xlsx")
+
+
   
   
