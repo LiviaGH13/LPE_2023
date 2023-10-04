@@ -58,3 +58,14 @@ df %>% janitor::clean_names() %>% glimpse()
 clean_data <- df %>% janitor::clean_names() %>% glimpse()
 cd <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% janitor::clean_names()
 cd %>% glimpse()
+
+
+# DEALING W DATA ----------------------------------------------------------
+
+villa_boa_gas <- cd %>% select(precio_gasoleo_a, rotulo, direccion, localidad) %>% 
+  filter(localidad=="VILLAVICIOSA DE ODON" | localidad== "BOADILLA DEL MONTE") %>% 
+  arrange(precio_gasoleo_a) %>% View()
+MIN <- cd %>% select(min(precio_gasoleo_a, na.rm = FALSE))
+gas_max <- cd %>% select(precio_gasoleo_a, rotulo, direccion, provincia) %>% filter(provincia == "MADRID") %>% arrange(precio_gasoleo_a) 
+  
+  
