@@ -5,10 +5,10 @@
 
 
 # LOADING LIBS ------------------------------------------------------------
-install.packages(c("tidyverse", "dplyr", "janitor"))
-install.packages(c("xlsx"))
-library("dplyr","janitor","readr", "xlsx")
-
+#install.packages(c("tidyverse", "dplyr", "janitor","xlsx"))
+library("janitor","readr","dplyr")
+library("tidyverse")
+library("xlsx")
 
 # LOADING DATA ------------------------------------------------------------
 exp_22062293 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/")
@@ -59,7 +59,6 @@ df %>% janitor::clean_names() %>% glimpse()
 clean_data <- df %>% janitor::clean_names() %>% glimpse()
 cd <- df %>% readr::type_convert(locale = readr::locale(decimal_mark=",")) %>% janitor::clean_names()
 cd %>% glimpse()
-
 
 # DEALING W DATA ----------------------------------------------------------
 
