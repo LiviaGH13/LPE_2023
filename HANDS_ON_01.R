@@ -4,12 +4,14 @@
 # TEMA: HANDS_ON_01
 
 
+
 # LOADING LIBS ------------------------------------------------------------
 install.packages(c("tidyverse", "dplyr", "janitor"))
 install.packages(c("xlsx"))
+install.packages(c("leaflet"))
 library("dplyr","janitor","readr", "xlsx")
-
-
+library("tidyverse")
+library("leaflet")
 # LOADING DATA ------------------------------------------------------------
 exp_22062293 <- jsonlite::fromJSON("https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/")
 
@@ -73,5 +75,27 @@ write.csv(gas_max, "gas_max.csv")
 xlsx::write.xlsx(gas_max, "gas_max.xlsx")
 
 
-  
+# GENERANDO REPORTES ------------------------------------------------------
+
+gas_mad_1_55 <-cd %>%  select(rotulo,precio_gasoleo_a,direccion,provincia,municipio,latitud,longitud_wgs84) %>% 
+  filter(provincia == "MADRID" & precio_gasoleo_a<1.55) %>% arrange(desc(precio_gasoleo_a)) %>% write_excel_csv2("gas_mad_1_55.xls")
+
+gas_mad_1_55 %>% leaflet() %>% addTiles() %>% 
+  addCircleMarkers(lat = ~latitud, lng = ~longitud_wgs84, popup = ~rotulo, label =~precio_gasoleo_a)
+
+# FILTRO GASOLINERA -------------------------------------------------------
+
+BALLENOIL_MADRID <- cd %>% select(precio_gasoleo_a,rotulo,direccion,localidad,municipio,provincia,latitud,longitud_wgs84) %>%  
+  filter(provincia =="MADRID" & rotulo=="BALLENOIL") %>% 
+  arrange(precio_gasoleo_a) %>% glimpse()  
+
+low_cost <- cd %>% select(precio_gasoleo_a,rotulo,direccion,localidad,municipio,provincia) %>% 
+  filter(provincia =="MADRID") %>% group_by(rotulo) %>% arrange(mean(precio_gasoleo_a)) %>% glimpse()
+
+# DEALING W COLS ----------------------------------------------------------
+
+cd %>% mutate(low_cost = !rotulo %in% c("REPSOL", "CEPSA","Q8","SHELL","CAMPSA","GALP","BP")) %>% view()
+
+gas_stefan <-cd %>%  select(rotulo,precio_gasoleo_a,direccion,provincia,localidad) %>% 
+  filter(provincia == "TOLEDO" & localidad == "CUERVA") 
   
