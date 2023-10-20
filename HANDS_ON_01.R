@@ -98,4 +98,25 @@ cd %>% mutate(low_cost = !rotulo %in% c("REPSOL", "CEPSA","Q8","SHELL","CAMPSA",
 
 gas_stefan <-cd %>%  select(rotulo,precio_gasoleo_a,direccion,provincia,localidad) %>% 
   filter(provincia == "TOLEDO" & localidad == "CUERVA") 
-  
+
+
+
+
+
+
+media_por_rotulo <- aggregate(precio_gasoleo_a ~ rotulo, data = cd, FUN = mean)
+media_por_rotulo <- media_por_rotulo %>% rename(media_por_rotulo = precio_gasoleo_a)
+print(media_por_rotulo)
+cd_nuevo <- cd %>% left_join(media_por_rotulo, by = "rotulo")
+
+media <- cd %>% summarise(media = mean(precio_gasoleo_a,na.rm = TRUE))
+print(media)
+#cd_nuevo <- cd_nuevo %>% mutate(media_total = media)
+
+cd_nuevo <- cd_nuevo %>% mutate(lowcost = precio_gasoleo_a < media_por_rotulo) 
+#cd_nuevo <- subset(cd_nuevo, select = -precio_gasoleo_a.y)
+cd_nuevo %>% glimpse()
+
+cd_nuevo %>% write_excel_csv2("LOW_COST.xls")
+
+
