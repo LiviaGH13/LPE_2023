@@ -101,9 +101,6 @@ gas_stefan <-cd %>%  select(rotulo,precio_gasoleo_a,direccion,provincia,localida
 
 
 
-
-
-
 media_por_rotulo <- aggregate(precio_gasoleo_a ~ rotulo, data = cd, FUN = mean)
 media_por_rotulo <- media_por_rotulo %>% rename(media_por_rotulo = precio_gasoleo_a)
 print(media_por_rotulo)
@@ -120,3 +117,27 @@ cd_nuevo %>% glimpse()
 cd_nuevo %>% write_excel_csv2("LOW_COST.xls")
 
 
+# MEDIA GASOLINA COMUNIDAD AUTONOMA ---------------------------------------
+
+media_CLM <- cd %>% filter(provincia %in% c("ALBACETE", "CIUDAD REAL", "CUENCA", "GUADALAJARA", "TOLEDO")) %>%
+  group_by(provincia) %>% summarize(media_precio = mean(precio_gasoleo_a, na.rm = TRUE))
+
+# Calculate the overall average gasoleo price for Castilla-La Mancha
+average_price_clm <- media_CLM %>% summarize(avg_price_clm = mean(media_precio, na.rm = TRUE))
+
+# View the province-level averages and the overall average
+View(media_CLM)
+View(average_price_clm)
+
+# Mostrar la media
+average_price_clm
+
+#nueva columna 
+
+library(readxl)
+
+tabla_comunidades <- readxl::read_excel("codccaa_OFFCIAL.xls")
+colnames(tabla_comunidades) <- tabla_comunidades[1, ]
+tabla_comunidades <- tabla_comunidades[-1, ]
+
+cd_comunidades <- cd %>% left_join(tabla_comunidades, by = c("idccaa" = "CODIGO"))
