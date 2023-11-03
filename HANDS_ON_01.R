@@ -141,3 +141,15 @@ colnames(tabla_comunidades) <- tabla_comunidades[1, ]
 tabla_comunidades <- tabla_comunidades[-1, ]
 
 cd_comunidades <- cd %>% left_join(tabla_comunidades, by = c("idccaa" = "CODIGO"))
+
+# POBLACION ---------------------------------------------------------------
+
+library(readxl)
+pobmun22 <- read_excel("pobmun22.xlsx", skip = 1)
+
+data_join <- pobmun22 %>% select(NOMBRE,POB22)
+
+data <- inner_join(data_join,cd_nuevo, by= c("NOMBRE"= "municipio")) %>% glimpse()
+
+
+
